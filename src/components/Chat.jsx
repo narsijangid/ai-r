@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import './Chat.css';
 
-const API_KEY = "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";
+const API_KEY = "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";
 
 function Chat() {
   const [messages, setMessages] = useState([]);

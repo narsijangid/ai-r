@@ -13,7 +13,7 @@
 }
 
 .chat-header {
-  background: #1a1a1a; /* Professional black header */
+  background: linear-gradient(180deg, #00BCD3FF, rgb(69 37 188 / 77%) 100%); /* Professional black header */
   color: #fff;
   padding: 12px 16px;
   display: flex;

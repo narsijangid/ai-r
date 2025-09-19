@@ -239,7 +239,7 @@ User message: ${currentInput}`
       {/* Header */}
       <div style={{
         padding: '15px 20px',
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        background: 'linear-gradient(180deg, #00BCD3FF, rgb(69 37 188 / 77%) 100%)',
         display: 'flex',
         alignItems: 'center',
         gap: '12px',
@@ -293,7 +293,7 @@ User message: ${currentInput}`
           flex: 1,
           padding: '10px 15px',
           overflowY: 'auto',
-          background: 'linear-gradient(to bottom, #0a0a0a, #1a1a1a)',
+          background: 'linear-gradient(180deg, #00BCD3FF, rgb(69 37 188 / 77%) 100%);',
           scrollBehavior: 'smooth',
           WebkitOverflowScrolling: 'touch'
         }}

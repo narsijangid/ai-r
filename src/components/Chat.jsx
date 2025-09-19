@@ -320,7 +320,7 @@ User message: ${currentInput}`
                 padding: '12px 16px',
                 borderRadius: message.type === 'user' ? '20px 20px 4px 20px' : '20px 20px 20px 4px',
                 background: message.type === 'user' 
-                  ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+                  ? 'linear-gradient(180deg, #00BCD3FF, rgb(69 37 188 / 77%) 100%)'
                   : 'linear-gradient(135deg, #2d2d2d 0%, #3d3d3d 100%)',
                 color: '#ffffff',
                 fontSize: '15px',
@@ -565,7 +565,7 @@ User message: ${currentInput}`
             width: '48px',
             height: '48px',
             background: inputMessage.trim() 
-              ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+              ? 'linear-gradient(180deg, #00BCD3FF, rgb(69 37 188 / 77%) 100%)'
               : 'rgba(45, 45, 45, 0.8)',
             color: '#ffffff',
             border: 'none',
@@ -729,7 +729,7 @@ User message: ${currentInput}`
                   padding: '10px 20px',
                   background: (!reportReason || isSubmitting) 
                     ? 'rgba(102, 126, 234, 0.5)'
-                    : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    : 'linear-gradient(180deg, #00BCD3FF, rgb(69 37 188 / 77%) 100%)',
                   color: '#ffffff',
                   border: 'none',
                   borderRadius: '8px',

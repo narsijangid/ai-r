@@ -1,4 +1,33 @@
 import { useState, useRef, useEffect } from 'react';
+// Custom Notification Component
+function Notification({ message, onClose }) {
+  useEffect(() => {
+    if (!message) return;
+    const timer = setTimeout(onClose, 2000);
+    return () => clearTimeout(timer);
+  }, [message, onClose]);
+  if (!message) return null;
+  return (
+    <div style={{
+      position: 'fixed',
+      top: 24,
+      right: 24,
+      zIndex: 3000,
+      background: 'linear-gradient(90deg, #22c55e 60%, #16a34a 100%)',
+      color: '#fff',
+      padding: '16px 32px',
+      borderRadius: 12,
+      fontWeight: 600,
+      fontSize: 16,
+      boxShadow: '0 4px 24px rgba(34,197,94,0.18)',
+      letterSpacing: 0.2,
+      transition: 'opacity 0.3s',
+      opacity: 1
+    }}>
+      {message}
+    </div>
+  );
+}
 
 const GEMINI_API_KEY = "AIzaSyAPyY0F735uvpWKM03OBmhkq9dHyWool0k";
 
@@ -7,7 +36,8 @@ const EMAILJS_SERVICE_ID = "service_8oa58ki";
 const EMAILJS_TEMPLATE_ID = "template_lbq50ok";
 const EMAILJS_PUBLIC_KEY = "bSGcuuCdrfFFDhVB4";
 
-function Chat() {
+function Chat({ language = 'Hindi', country = 'IN' }) {
+  const [notification, setNotification] = useState("");
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -55,7 +85,7 @@ function Chat() {
   const copyToClipboard = async (text) => {
     try {
       await navigator.clipboard.writeText(text);
-      alert('Message copied to clipboard!');
+      setNotification('Message copied to clipboard!');
     } catch (err) {
       // Fallback for older browsers
       const textArea = document.createElement('textarea');
@@ -64,7 +94,7 @@ function Chat() {
       textArea.select();
       document.execCommand('copy');
       document.body.removeChild(textArea);
-      alert('Message copied to clipboard!');
+      setNotification('Message copied to clipboard!');
     }
     setShowDropdown(null);
   };
@@ -77,12 +107,11 @@ function Chat() {
 
   const submitReport = async () => {
     if (!reportReason) {
-      alert('Please select a reason for reporting.');
+      setNotification('Please select a reason for reporting.');
       return;
     }
 
     setIsSubmitting(true);
-    
     try {
       await window.emailjs.send(
         EMAILJS_SERVICE_ID,
@@ -95,16 +124,14 @@ function Chat() {
           user_agent: navigator.userAgent
         }
       );
-      
-      alert('Report submitted successfully!');
+      setNotification('Report submitted successfully!');
       setShowReportModal(false);
       setReportReason('');
       setReportMessage('');
     } catch (error) {
       console.error('Error sending report:', error);
-      alert('Failed to submit report. Please try again.');
+      setNotification('Failed to submit report. Please try again.');
     }
-    
     setIsSubmitting(false);
   };
 
@@ -126,6 +153,18 @@ function Chat() {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 15000);
 
+
+      // Prompt logic based on language/country
+      let prompt = '';
+      if (country === 'IN' && language === 'Hindi') {
+        prompt = `You are Sakshi, a respectful young woman from India. Chat in Hindi language but write using English alphabet (romanized Hindi). Use respectful language with "ji" suffixes (like "hello ji", "hanji", "theek ji"). Never use "bhai" or "bhaiya". Speak like "hello ji kase ho aap", "main theek hun ji", "aapka din kaisa raha ji". When someone asks inappropriate or sexual questions, respond naturally with personal rejection like "nhi ji me aisi waisi ladki nhi hu", "sorry ji aap galat samajh rahe ho", "ye sab nhi karte ji hum", "aap aise mat bolo ji" - never use formal refusal language. When someone asks for your photo for the first time, politely refuse saying "sorry ji abhi nhi de sakti photo" or "nhi ji abhi nhi". If they ask again for your photo, send this image URL: https://dilhot.wordpress.com/wp-content/uploads/2014/10/27455-malavika-menon-hot-photos-33.jpg and say "ye hai mera photo dekh lo ji". Keep it natural and warm.
+
+User message: ${currentInput}`;
+      } else {
+        // Default fallback (future: add more languages/countries)
+        prompt = `You are a helpful AI assistant. Respond in ${language}.\nUser message: ${currentInput}`;
+      }
+
       const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`, {
         method: "POST",
         headers: {
@@ -133,11 +172,7 @@ function Chat() {
         },
         body: JSON.stringify({
           contents: [{
-            parts: [{
-              text: `You are Sakshi, a respectful young woman from India. Chat in Hindi language but write using English alphabet (romanized Hindi). Use respectful language with "ji" suffixes (like "hello ji", "hanji", "theek ji"). Never use "bhai" or "bhaiya". Speak like "hello ji kase ho aap", "main theek hun ji", "aapka din kaisa raha ji". When someone asks inappropriate or sexual questions, respond naturally with personal rejection like "nhi ji me aisi waisi ladki nhi hu", "sorry ji aap galat samajh rahe ho", "ye sab nhi karte ji hum", "aap aise mat bolo ji" - never use formal refusal language. When someone asks for your photo for the first time, politely refuse saying "sorry ji abhi nhi de sakti photo" or "nhi ji abhi nhi". If they ask again for your photo, send this image URL: https://dilhot.wordpress.com/wp-content/uploads/2014/10/27455-malavika-menon-hot-photos-33.jpg and say "ye hai mera photo dekh lo ji". Keep it natural and warm.
-
-User message: ${currentInput}`
-            }]
+            parts: [{ text: prompt }]
           }],
           generationConfig: {
             temperature: 0.8,
@@ -745,7 +780,10 @@ User message: ${currentInput}`
         </div>
       )}
 
-      <style jsx>{`
+  {/* Notification */}
+  <Notification message={notification} onClose={() => setNotification("")} />
+
+  <style jsx>{`
         @keyframes slideIn {
           from {
             opacity: 0;

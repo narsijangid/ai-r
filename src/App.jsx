@@ -115,6 +115,23 @@ function App() {
           >
             Change Country
           </button>
+          <button
+            onClick={() => window.location.href = '/VoiceAI'}
+            style={{
+              padding: '14px 0',
+              background: 'linear-gradient(90deg, #00BCD3FF, #4525bc)',
+              color: '#fff',
+              border: 'none',
+              borderRadius: 8,
+              fontSize: 18,
+              fontWeight: 600,
+              cursor: 'pointer',
+              marginBottom: 16,
+              boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
+            }}
+          >
+            Voice AI
+          </button>
           <div style={{ color: '#666', fontSize: 14, marginTop: 24, opacity: 0.7 }}>
             Changing country will clear your chat and preferences.
           </div>

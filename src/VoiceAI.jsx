@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-const VoiceAI = () => {
+const VoiceAI = (props) => {
   const [soundPlayed, setSoundPlayed] = useState(false);
   const [status, setStatus] = useState("Waiting...");
   const [statusColor, setStatusColor] = useState("#fff");
@@ -337,7 +337,7 @@ const VoiceAI = () => {
 
       <div className="wrap">
         <button
-          onClick={() => window.location.href = '/'}
+          onClick={props.onBack}
           style={{
             position: 'fixed',
             top: 20,

@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import Chat from './components/Chat';
 import CountrySelect from './components/CountrySelect';
+import VoiceAI from './VoiceAI';
 import './App.css';
 
 
@@ -13,6 +14,7 @@ function App() {
     return saved ? JSON.parse(saved) : null;
   });
   const [showSidebar, setShowSidebar] = useState(false);
+  const [showVoiceAI, setShowVoiceAI] = useState(false);
 
   useEffect(() => {
     if (selectedCountry) {
@@ -25,6 +27,10 @@ function App() {
     return (
       <CountrySelect onSelect={setSelectedCountry} />
     );
+  }
+
+  if (showVoiceAI) {
+    return <VoiceAI onBack={() => setShowVoiceAI(false)} />;
   }
 
   return (
@@ -116,7 +122,10 @@ function App() {
             Change Country
           </button>
           <button
-            onClick={() => window.location.href = '/VoiceAI'}
+            onClick={() => {
+              setShowVoiceAI(true);
+              setShowSidebar(false);
+            }}
             style={{
               padding: '14px 0',
               background: 'linear-gradient(90deg, #00BCD3FF, #4525bc)',

@@ -29,7 +29,7 @@ function Notification({ message, onClose }) {
   );
 }
 
-const GEMINI_API_KEY = "AIzaSyBXzq1L5Z07Bwxiz9YaWqgNohvwhqGN0HM";
+const GEMINI_API_KEY = "AIzaSyDiYO3LGMdpnDd4XKbnnEU8Ky-frnZlFYQ";
 
 // EmailJS configuration
 const EMAILJS_SERVICE_ID = "service_8oa58ki";

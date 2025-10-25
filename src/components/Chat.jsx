@@ -1,15 +1,4 @@
 import { useState, useRef, useEffect } from 'react';
-import OpenAI from 'openai';
-
-// Initialize OpenRouter AI
-const openai = new OpenAI({
-  baseURL: "https://openrouter.ai/api/v1",
-  apiKey: "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",
-  defaultHeaders: {
-    "HTTP-Referer": window.location.origin,
-    "X-Title": "Perplix Ai",
-  },
-});
 
 // Custom Notification Component
 function Notification({ message, onClose }) {
@@ -41,9 +30,6 @@ function Notification({ message, onClose }) {
   );
 }
 
-const GEMINI_API_KEY = "AIzaSyBR3mrNl6OF0BzEqjF4GnogePmN7F5R1D0";
-
-// EmailJS configuration
 const EMAILJS_SERVICE_ID = "service_8oa58ki";
 const EMAILJS_TEMPLATE_ID = "template_lbq50ok";
 const EMAILJS_PUBLIC_KEY = "bSGcuuCdrfFFDhVB4";
@@ -74,10 +60,7 @@ function Chat({ language = 'Hindi', country = 'IN' }) {
       window.emailjs.init(EMAILJS_PUBLIC_KEY);
     };
     document.head.appendChild(script);
-
-    return () => {
-      document.head.removeChild(script);
-    };
+    return () => document.head.removeChild(script);
   }, []);
 
   const typeEffect = async (text) => {
@@ -120,7 +103,6 @@ function Chat({ language = 'Hindi', country = 'IN' }) {
       setNotification('Please select a reason for reporting.');
       return;
     }
-
     setIsSubmitting(true);
     try {
       await window.emailjs.send(
@@ -148,11 +130,7 @@ function Chat({ language = 'Hindi', country = 'IN' }) {
   const sendMessage = async () => {
     if (!inputMessage.trim()) return;
 
-    const userMessage = {
-      type: 'user',
-      content: inputMessage.trim(),
-      id: Date.now()
-    };
+    const userMessage = { type: 'user', content: inputMessage.trim(), id: Date.now() };
     setMessages(prev => [...prev, userMessage]);
     const currentInput = inputMessage.trim();
     setInputMessage('');
@@ -162,28 +140,19 @@ function Chat({ language = 'Hindi', country = 'IN' }) {
       const botMessage = { type: 'bot', content: '', id: Date.now() };
       setMessages(prev => [...prev, botMessage]);
 
-      // Prompt logic based on language/country
-      let prompt = '';
-      if (country === 'IN' && language === 'Hindi') {
-        prompt = `You are Sakshi, a respectful young woman from India. Chat in Hindi language using romanized letters with polite "ji" suffixes. Respond naturally to inappropriate requests. User message: ${currentInput}`;
-      } else {
-        prompt = `You are a helpful AI assistant. Respond in ${language}. User message: ${currentInput}`;
-      }
-
-      const completion = await openai.chat.completions.create({
-        model: "anthropic/claude-3.7-sonnet",
-        messages: [{ role: "user", content: [{ type: "text", text: prompt }] }],
+      const response = await fetch("/.netlify/functions/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: currentInput })
       });
 
-      const botResponse = completion.choices?.[0]?.message?.content?.[0]?.text || "Sorry ji, response nahi aa raha.";
+      const data = await response.json();
       setIsTyping(false);
-      typeEffect(botResponse);
+      typeEffect(data.reply || "Sorry ji, response nahi aa raha.");
     } catch (err) {
       setIsTyping(false);
-      let errorMsg = "Sorry ji, abhi kuch problem aa rahi hai. Thoda wait karo ji.";
-      if (err.name === "AbortError") errorMsg = "Sorry ji, time out ho gaya - internet check karo ji";
-      setMessages(prev => [...prev, { type: 'bot', content: errorMsg, id: Date.now() }]);
-      console.error("Sakshi Chatbot Error:", err);
+      setMessages(prev => [...prev, { type: 'bot', content: "Server error ji, thoda wait karo.", id: Date.now() }]);
+      console.error("Chat Error:", err);
     }
   };
 
@@ -201,9 +170,98 @@ function Chat({ language = 'Hindi', country = 'IN' }) {
   }, []);
 
   return (
-    <div style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif', width: '100vw', height: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: '#0a0a0a', color: '#ffffff', overflow: 'hidden', position: 'relative' }}>
+    <div style={{
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+      width: '100vw',
+      height: '100vh',
+      display: 'flex',
+      flexDirection: 'column',
+      backgroundColor: '#0a0a0a',
+      color: '#ffffff',
+      overflow: 'hidden',
+      position: 'relative'
+    }}>
       {/* Header */}
-      {/* Messages container, input, dropdown, report modal all remain the same as your original code */}
+      <div style={{
+        padding: '15px 20px',
+        background: 'linear-gradient(180deg, #00BCD3FF, rgb(69 37 188 / 77%) 100%)',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '12px',
+        boxShadow: '0 2px 10px rgba(0,0,0,0.3)',
+        position: 'relative',
+        zIndex: 10
+      }}>
+        <div style={{ position: 'relative' }}>
+          <img 
+            src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg3xIL1RodzSzQkjl0qbz5o7VLYRQWUUHtIeGMJvl26k00YwyJu6xygHSz7RBKuvKtBoDst3FKK8Q8Ajux3UfCKigYnBlI_mA_42zUaGrYLhcuFaYnPz_VOCZTp80wl2LmPSH46C12SlD5VQV1Atl0t0uy3e_1xBDsxtttMFOjA_Ceycmr8CZ-ld1xuuGtM/s500/Untitled_design__1_-removebg-preview%20%282%29.png" 
+            alt="profile" 
+            style={{ width: '42px', height: '42px', borderRadius: '50%', border: '2px solid rgba(255,255,255,0.3)' }}
+          />
+          <div style={{ position: 'absolute', bottom: '2px', right: '2px', width: '12px', height: '12px', backgroundColor: '#4ade80', borderRadius: '50%', border: '2px solid #fff' }}></div>
+        </div>
+        <div>
+          <div style={{ fontSize: '18px', fontWeight: '600', color: '#ffffff' }}>Perplix Ai</div>
+          <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.8)', marginTop: '2px' }}>Online</div>
+        </div>
+      </div>
+
+      {/* Messages */}
+      <div ref={chatMessagesRef} style={{ flex: 1, padding: '10px 15px', overflowY: 'auto', background: 'linear-gradient(180deg, #00BCD3FF, rgb(69 37 188 / 77%) 100%)', scrollBehavior: 'smooth' }}>
+        {messages.map((message, index) => (
+          <div key={message.id || index} style={{ margin: '8px 0', display: 'flex', justifyContent: message.type === 'user' ? 'flex-end' : 'flex-start', alignItems: 'flex-start', animation: 'slideIn 0.3s ease-out' }}>
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', maxWidth: '85%', flexDirection: message.type === 'user' ? 'row-reverse' : 'row' }}>
+              <div style={{
+                padding: '12px 16px',
+                borderRadius: message.type === 'user' ? '20px 20px 4px 20px' : '20px 20px 20px 4px',
+                background: message.type === 'user' ? 'linear-gradient(180deg, #00BCD3FF, rgb(69 37 188 / 77%) 100%)' : 'linear-gradient(135deg, #2d2d2d 0%, #3d3d3d 100%)',
+                color: '#ffffff',
+                fontSize: '15px',
+                lineHeight: '1.4',
+                wordWrap: 'break-word',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
+                position: 'relative',
+                transition: 'all 0.2s ease'
+              }}>
+                {message.content}
+                <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.6)', marginTop: '4px', textAlign: 'right' }}>
+                  {new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })}
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+
+        {isTyping && (
+          <div style={{ margin: '8px 0', display: 'flex', justifyContent: 'flex-start' }}>
+            <div style={{ maxWidth: '85%', padding: '12px 16px', borderRadius: '20px 20px 20px 4px', background: 'linear-gradient(135deg, #2d2d2d 0%, #3d3d3d 100%)', color: 'rgba(255,255,255,0.7)', fontSize: '14px', fontStyle: 'italic', boxShadow: '0 2px 8px rgba(0,0,0,0.2)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div style={{ display: 'flex', gap: '3px' }}>
+                <div style={{ width: '6px', height: '6px', backgroundColor: '#667eea', borderRadius: '50%', animation: 'bounce 1.4s infinite ease-in-out' }}></div>
+                <div style={{ width: '6px', height: '6px', backgroundColor: '#667eea', borderRadius: '50%', animation: 'bounce 1.4s infinite ease-in-out 0.2s' }}></div>
+                <div style={{ width: '6px', height: '6px', backgroundColor: '#667eea', borderRadius: '50%', animation: 'bounce 1.4s infinite ease-in-out 0.4s' }}></div>
+              </div>
+              Sakshi is typing...
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Input */}
+      <div style={{ padding: '15px 20px', background: 'rgba(26, 26, 26, 0.95)', backdropFilter: 'blur(10px)', borderTop: '1px solid rgba(255,255,255,0.1)', display: 'flex', gap: '12px', alignItems: 'flex-end', position: 'relative' }}>
+        <div style={{ flex: 1, position: 'relative' }}>
+          <input
+            type="text"
+            value={inputMessage}
+            onChange={(e) => setInputMessage(e.target.value)}
+            onKeyPress={handleKeyPress}
+            placeholder="Type a message..."
+            style={{ width: '100%', padding: '14px 20px', border: 'none', borderRadius: '25px', fontSize: '16px', backgroundColor: 'rgba(45, 45, 45, 0.8)', color: '#ffffff', outline: 'none', boxSizing: 'border-box', transition: 'all 0.2s ease' }}
+          />
+        </div>
+        <button onClick={sendMessage} style={{ background: 'linear-gradient(180deg, #00BCD3FF, rgb(69 37 188 / 77%) 100%)', padding: '12px 20px', borderRadius: '50%', border: 'none', cursor: 'pointer', color: '#fff', fontWeight: '600', fontSize: '16px' }}>
+          Send
+        </button>
+      </div>
 
       <Notification message={notification} onClose={() => setNotification("")} />
 

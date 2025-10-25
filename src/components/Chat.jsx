@@ -286,7 +286,7 @@ User message: ${currentInput}`;
           position: 'relative'
         }}>
           <img 
-            src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg3xIL1RodzSzQkjl0qbz5o7VLYRQWUUHtIeGMJvl26k00YwyJu6xygHSz7RBKuvKtBoDst3FKK8Q8Ajux3UfCKigYnBlI_mA_42zUaGrYLhcuFaYnPz_VOCZTp80wl2LmPSH46C12SlD5VQV1Atl0t0uy3e_1xBDsxtttMFOjA_Ceycmr8CZ-ld1xuuGtM/s500/Untitled_design__1_-removebg-preview%20%282%29.png" 
+            src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi4Bjkq7i8PLKv52ppJKNaFn9-ShSCBpvCPaLxSdNJBUSZsxFOcGJXkQqKYyHpw6sCulPAVuPJKd69iXUOIANJ71klSKXYi0U2_liHUrvolY2f99dlMoYrGVL9ph3qGzp07Kpn_DSIlz-_034Y7Yy4U8hi20jdIqg8EPTbMM-Abd9uQ7oM_tUr_GMje4UWl/s512/Untitled%20design.png" 
             alt="profile" 
             style={{
               width: '42px',

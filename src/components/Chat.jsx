@@ -29,7 +29,7 @@ function Notification({ message, onClose }) {
   );
 }
 
-const GEMINI_API_KEY = "AIzaSyDiYO3LGMdpnDd4XKbnnEU8Ky-frnZlFYQ";
+const GEMINI_API_KEY = "AIzaSyDn2kNND7j7xN7zAMDMcXuFuw5Q_fz48mE";
 
 // EmailJS configuration
 const EMAILJS_SERVICE_ID = "service_8oa58ki";
@@ -286,7 +286,7 @@ User message: ${currentInput}`;
           position: 'relative'
         }}>
           <img 
-            src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjXD1BH4c5w1QNK5Gw3VGY7Y02RiaeugW8RGm_swG_84fXhcYYG0jpcahi4eagAIN_7Hsj1Om2uw2RtJ2aHx8WuXkfCywdosEjtqjYwTSwD0n6HTWH2S0jmeaGEqKI_3rmMM42OPawq5WFa84fY-5Wabqql0fBVCuVpasl5RUStDSTnmyqkK0a2f0s2-FSs/s2048/Gemini_Generated_Image_6xo5tl6xo5tl6xo5%20(1).png" 
+            src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg3xIL1RodzSzQkjl0qbz5o7VLYRQWUUHtIeGMJvl26k00YwyJu6xygHSz7RBKuvKtBoDst3FKK8Q8Ajux3UfCKigYnBlI_mA_42zUaGrYLhcuFaYnPz_VOCZTp80wl2LmPSH46C12SlD5VQV1Atl0t0uy3e_1xBDsxtttMFOjA_Ceycmr8CZ-ld1xuuGtM/s500/Untitled_design__1_-removebg-preview%20%282%29.png" 
             alt="profile" 
             style={{
               width: '42px',
@@ -312,7 +312,7 @@ User message: ${currentInput}`;
             fontSize: '18px', 
             fontWeight: '600',
             color: '#ffffff'
-          }}>Sakshi</div>
+          }}>Perplix Ai</div>
           <div style={{
             fontSize: '12px',
             color: 'rgba(255,255,255,0.8)',

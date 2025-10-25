@@ -543,7 +543,7 @@ User message: ${currentInput}`;
                   animation: 'bounce 1.4s infinite ease-in-out 0.4s'
                 }}></div>
               </div>
-              Sakshi is typing...
+              Perplix is typing...
             </div>
           </div>
         )}

@@ -41,6 +41,13 @@ function Notification({ message, onClose }) {
   );
 }
 
+const GEMINI_API_KEY = "AIzaSyBR3mrNl6OF0BzEqjF4GnogePmN7F5R1D0";
+
+// EmailJS configuration
+const EMAILJS_SERVICE_ID = "service_8oa58ki";
+const EMAILJS_TEMPLATE_ID = "template_lbq50ok";
+const EMAILJS_PUBLIC_KEY = "bSGcuuCdrfFFDhVB4";
+
 function Chat({ language = 'Hindi', country = 'IN' }) {
   const [notification, setNotification] = useState("");
   const [messages, setMessages] = useState([]);
@@ -58,6 +65,20 @@ function Chat({ language = 'Hindi', country = 'IN' }) {
       chatMessagesRef.current.scrollTop = chatMessagesRef.current.scrollHeight;
     }
   }, [messages, isTyping]);
+
+  // Load EmailJS script
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
+    script.onload = () => {
+      window.emailjs.init(EMAILJS_PUBLIC_KEY);
+    };
+    document.head.appendChild(script);
+
+    return () => {
+      document.head.removeChild(script);
+    };
+  }, []);
 
   const typeEffect = async (text) => {
     let displayText = '';
@@ -103,8 +124,8 @@ function Chat({ language = 'Hindi', country = 'IN' }) {
     setIsSubmitting(true);
     try {
       await window.emailjs.send(
-        "service_8oa58ki",
-        "template_lbq50ok",
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
         {
           to_email: 'narsijangidusa@gmail.com',
           report_reason: reportReason,
@@ -141,10 +162,10 @@ function Chat({ language = 'Hindi', country = 'IN' }) {
       const botMessage = { type: 'bot', content: '', id: Date.now() };
       setMessages(prev => [...prev, botMessage]);
 
-      // Prepare prompt based on language/country
+      // Prompt logic based on language/country
       let prompt = '';
       if (country === 'IN' && language === 'Hindi') {
-        prompt = `You are Sakshi, a respectful young woman from India. Chat in Hindi using romanized letters with polite suffixes like "ji". Respond naturally to inappropriate requests with rejections. User message: ${currentInput}`;
+        prompt = `You are Sakshi, a respectful young woman from India. Chat in Hindi language using romanized letters with polite "ji" suffixes. Respond naturally to inappropriate requests. User message: ${currentInput}`;
       } else {
         prompt = `You are a helpful AI assistant. Respond in ${language}. User message: ${currentInput}`;
       }
@@ -182,7 +203,7 @@ function Chat({ language = 'Hindi', country = 'IN' }) {
   return (
     <div style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif', width: '100vw', height: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: '#0a0a0a', color: '#ffffff', overflow: 'hidden', position: 'relative' }}>
       {/* Header */}
-      {/* ... keep all your header, messages container, input, dropdown, and report modal as is ... */}
+      {/* Messages container, input, dropdown, report modal all remain the same as your original code */}
 
       <Notification message={notification} onClose={() => setNotification("")} />
 
